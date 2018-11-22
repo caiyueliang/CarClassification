@@ -8,7 +8,8 @@ def mkdir_if_not_exist(path):
         os.makedirs(os.path.join(path))
 
 
-def data_pre_process(root_path, input_path):
+#
+def data_pre_process(root_path, output_path):
     files_list = list()
 
     for root, dirs, files in os.walk(root_path):
@@ -16,7 +17,7 @@ def data_pre_process(root_path, input_path):
             # print(file)     #文件名
             files_list.append(os.path.join(root, file))
 
-    mkdir_if_not_exist(input_path)
+    mkdir_if_not_exist(output_path)
 
     for file in files_list:
         print(file)
@@ -25,12 +26,24 @@ def data_pre_process(root_path, input_path):
         new_dir = (name_list[0] + "_" + name_list[1]).replace(' ', '').replace('（', '(').replace('）', ')') \
             .replace("(stopsale)", "")
 
-        mkdir_if_not_exist(os.path.join(input_path, new_dir))
-        shutil.copy(file, os.path.join(input_path, new_dir, name_list[2]))
+        mkdir_if_not_exist(os.path.join(output_path, new_dir))
+        shutil.copy(file, os.path.join(output_path, new_dir, name_list[2]))
+    return
 
-    print len(files_list)
+
+def data_pre_process_1(root_path, output_path, min_size):
+    mkdir_if_not_exist(output_path)
+    for root, dirs, files in os.walk(root_path):
+        for dir in dirs:
+            dir_path = os.path.join(root, dir)
+            print(dir_path)              # 文件名
+
+            for root_1, dirs_1, files_1 in os.walk(dir_path):
+                if len(files_1) >= min_size:
+                    shutil.copytree(dir_path, os.path.join(output_path, dir))
     return
 
 
 if __name__ == '__main__':
-    data_pre_process('../../Data/car_classifier', '../../Data/car_classifier_new')
+    # data_pre_process('../../Data/car_classifier', '../../Data/car_classifier_new')
+    data_pre_process_1('../../Data/car_classifier_new/', '../../Data/car_classifier_min_20/', 20)
