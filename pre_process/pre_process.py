@@ -21,9 +21,12 @@ def data_pre_process(root_path, input_path):
     for file in files_list:
         print(file)
         name_list = file.split('/')[-1].split('_')
-        # print(name_list)
-        mkdir_if_not_exist(os.path.join(input_path, (name_list[0] + "_" + name_list[1]).replace(' ', '')))
-        shutil.copy(file, os.path.join(input_path, (name_list[0] + "_" + name_list[1]).replace(' ', ''), name_list[2]))
+
+        new_dir = (name_list[0] + "_" + name_list[1]).replace(' ', '').replace('（', '(').replace('）', ')') \
+            .replace("(stopsale)", "")
+
+        mkdir_if_not_exist(os.path.join(input_path, new_dir))
+        shutil.copy(file, os.path.join(input_path, new_dir, name_list[2]))
 
     print len(files_list)
     return
