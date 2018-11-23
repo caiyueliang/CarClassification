@@ -31,12 +31,6 @@ class ModuleTrain:
         else:
             self.use_gpu = False
 
-        print('[ModuleCNN]')
-        print('train_path: %s' % self.train_path)
-        print('test_path: %s' % self.test_path)
-        print('img_size: %d' % self.img_size)
-        print('batch_size: %d' % self.batch_size)
-
         # 模型
         self.model = model
 
@@ -74,7 +68,8 @@ class ModuleTrain:
         self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
         # self.loss = F.mse_loss
-        self.loss = F.smooth_l1_loss
+        # self.loss = F.smooth_l1_loss
+        self.loss = F.cross_entropy
 
         self.lr = lr
         # self.optimizer = optim.SGD(self.model.parameters(), lr=self.lr, momentum=0.5)
@@ -91,7 +86,7 @@ class ModuleTrain:
                 self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
             print('================================================')
-            for batch_idx, (data, target, _) in enumerate(self.train_loader):
+            for batch_idx, (data, target) in enumerate(self.train_loader):
                 data, target = Variable(data), Variable(target)
 
                 if self.use_gpu:
@@ -103,7 +98,7 @@ class ModuleTrain:
 
                 # 计算损失
                 output = self.model(data)
-                loss = self.loss(output.type(torch.FloatTensor), target.type(torch.FloatTensor))
+                loss = self.loss(output, target)
 
                 # 反向传播计算梯度
                 loss.backward()
@@ -137,7 +132,7 @@ class ModuleTrain:
         correct = 0
 
         # 测试集
-        for data, target, img_files in self.test_loader:
+        for data, target in self.test_loader:
             # print('[test] data.size: ', data.size())
             data, target = Variable(data), Variable(target)
             # print('[test] data.size: ', data.size())
@@ -149,14 +144,10 @@ class ModuleTrain:
             output = self.model(data)
             # sum up batch loss
             if self.use_gpu:
-                loss = self.loss(output, target.type(torch.cuda.FloatTensor))
+                loss = self.loss(output, target)
             else:
-                loss = self.loss(output, target.type(torch.FloatTensor))
+                loss = self.loss(output, target)
             test_loss += loss.item()
-
-            if show_img:
-                for i in range(len(output[:, 1])):
-                    self.show_img(img_files[i], output[i].cpu().detach().numpy(), target[i].cpu().detach().numpy())
 
         test_loss /= len(self.test_loader.dataset)
         print('[Test] set: Average loss: {:.4f}\n'.format(test_loss))
