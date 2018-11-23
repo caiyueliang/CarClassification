@@ -17,14 +17,14 @@ import cv2
 
 class ModuleTrain:
     def __init__(self, train_path, test_path, model_file, model, img_size=178, batch_size=8, lr=1e-3,
-                 re_train=False, best_loss=0.3):
+                 re_train=False, best_acc=0.9):
         self.train_path = train_path
         self.test_path = test_path
         self.model_file = model_file
         self.img_size = img_size
         self.batch_size = batch_size
         self.re_train = re_train                        # 不加载训练模型，重新进行训练
-        self.best_loss = best_loss                      # 最好的损失值，小于这个值，才会保存模型
+        self.best_acc = best_acc                        # 正确率这个值，才会保存模型
 
         if torch.cuda.is_available():
             self.use_gpu = True
@@ -44,7 +44,8 @@ class ModuleTrain:
 
         # RandomHorizontalFlip
         self.transform_train = T.Compose([
-            T.Resize((self.img_size, self.img_size)),
+            T.RandomHorizontalFlip(),
+            T.RandomResizedCrop(size=self.img_size, scale=(0.5, 1.0), ratio=(3./4., 4./3.)),
             T.ToTensor(),
             T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
         ])
@@ -115,10 +116,10 @@ class ModuleTrain:
             acc = float(correct) / float(len(self.train_loader.dataset))
             print('[Train] Epoch: {} \tLoss: {:.6f}\tAcc: {:.6f}\tlr: {}'.format(epoch_i, train_loss, acc, self.lr))
 
-            test_loss = self.test()
+            test_acc = self.test()
             if save_best is True:
-                if self.best_loss > test_loss:
-                    self.best_loss = test_loss
+                if test_acc > self.best_acc:
+                    self.best_acc = test_acc
                     str_list = self.model_file.split('.')
                     best_model_file = ""
                     for str_index in range(len(str_list)):
@@ -157,7 +158,7 @@ class ModuleTrain:
         test_loss /= len(self.test_loader.dataset)
         acc = float(correct) / float(len(self.test_loader.dataset))
         print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\n'.format(test_loss, acc))
-        return test_loss
+        return acc
 
     def load(self, name):
         print('[Load model] %s ...' % name)
