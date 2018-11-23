@@ -1,6 +1,7 @@
 # encoding:utf-8
 import os
 import shutil
+import random
 
 
 def mkdir_if_not_exist(path):
@@ -8,7 +9,7 @@ def mkdir_if_not_exist(path):
         os.makedirs(os.path.join(path))
 
 
-#
+# 大类拆分成小类
 def data_pre_process(root_path, output_path):
     files_list = list()
 
@@ -31,6 +32,7 @@ def data_pre_process(root_path, output_path):
     return
 
 
+# 提取文件数量大于min_size的类
 def data_pre_process_1(root_path, output_path, min_size):
     mkdir_if_not_exist(output_path)
     for root, dirs, files in os.walk(root_path):
@@ -44,6 +46,7 @@ def data_pre_process_1(root_path, output_path, min_size):
     return
 
 
+# 分为train和test文件
 def data_pre_process_2(root_path, output_path, count):
     mkdir_if_not_exist(output_path)
 
@@ -52,6 +55,8 @@ def data_pre_process_2(root_path, output_path, count):
     mkdir_if_not_exist(os.path.join(output_path, 'test'))
 
     for root, dirs, files in os.walk(root_path):
+        random.shuffle(files)
+
         for i, file in enumerate(files):
             dir_path = root.split('/')[-1]
             mkdir_if_not_exist(os.path.join(output_path, 'train', dir_path))
@@ -66,7 +71,25 @@ def data_pre_process_2(root_path, output_path, count):
     return
 
 
+def data_pre_process_3(root_path, output_path, count):
+    mkdir_if_not_exist(output_path)
+
+    mkdir_if_not_exist(output_path)
+    mkdir_if_not_exist(os.path.join(output_path, 'test'))
+
+    for root, dirs, files in os.walk(root_path):
+        random.shuffle(files)
+
+        for i, file in enumerate(files):
+            file_path = os.path.join(root, file)
+            print(file_path)
+            if i < count:
+                shutil.copy(file_path, os.path.join(output_path, 'test', file))
+    return
+
+
 if __name__ == '__main__':
     # data_pre_process('../../Data/car_classifier', '../../Data/car_classifier_new')
     # data_pre_process_1('../../Data/car_classifier_new/', '../../Data/car_classifier_min_50/', 50)
     data_pre_process_2('../../Data/car_classifier_min_50/', '../../Data/car_classifier_train/', 10)
+    # data_pre_process_3('../../Data/car_classifier_min_50/', '../../Data/car_classifier_1/', 20)
