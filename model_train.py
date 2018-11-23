@@ -106,11 +106,13 @@ class ModuleTrain:
                 self.optimizer.step()
 
                 predict = torch.argmax(output, 1)
-                correct += (predict == target).sum()
+                correct += (predict == target).sum().data
                 train_loss += loss.item()
 
+            # print(correct)
+            # print(len(self.train_loader.dataset))
             train_loss /= len(self.train_loader.dataset)
-            acc = correct/len(self.train_loader.dataset)
+            acc = float(correct) / float(len(self.train_loader.dataset))
             print('[Train] Epoch: {} \tLoss: {:.6f}\tAcc: {:.6f}\tlr: {}'.format(epoch_i, train_loss, acc, self.lr))
 
             test_loss = self.test()
@@ -150,11 +152,10 @@ class ModuleTrain:
             test_loss += loss.item()
 
             predict = torch.argmax(output, 1)
-            correct += (predict == target).sum()
+            correct += (predict == target).sum().data
 
         test_loss /= len(self.test_loader.dataset)
-        acc = correct / len(self.train_loader.dataset)
-
+        acc = float(correct) / float(len(self.test_loader.dataset))
         print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\n'.format(test_loss, acc))
         return test_loss
 
