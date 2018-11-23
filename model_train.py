@@ -80,6 +80,8 @@ class ModuleTrain:
     def train(self, epoch, decay_epoch=40, save_best=True):
         print('[train] epoch: %d' % epoch)
         for epoch_i in range(epoch):
+            train_loss = 0.0
+            correct = 0
 
             if epoch_i >= decay_epoch and epoch_i % decay_epoch == 0:                   # 减小学习速率
                 self.lr = self.lr * 0.1
@@ -103,10 +105,13 @@ class ModuleTrain:
                 # 更新参数
                 self.optimizer.step()
 
-                # update
-                if batch_idx == 0:
-                    print('[Train] Epoch: {} [{}/{}]\tLoss: {:.6f}\tlr: {}'.format(epoch_i, batch_idx * len(data),
-                        len(self.train_loader.dataset), loss.item()/self.batch_size, self.lr))
+                predict = torch.argmax(output, 1)
+                correct += (predict == target).sum()
+                train_loss += loss.item()
+
+            train_loss /= len(self.train_loader.dataset)
+            acc = correct/len(self.train_loader.dataset)
+            print('[Train] Epoch: {} \tLoss: {:.6f}\tAcc: {:.6f}\tlr: {}'.format(epoch_i, train_loss, acc, self.lr))
 
             test_loss = self.test()
             if save_best is True:
@@ -124,15 +129,13 @@ class ModuleTrain:
 
         self.save(self.model_file)
 
-    def test(self, show_img=False):
-        test_loss = 0
+    def test(self):
+        test_loss = 0.0
         correct = 0
 
         # 测试集
         for data, target in self.test_loader:
-            # print('[test] data.size: ', data.size())
             data, target = Variable(data), Variable(target)
-            # print('[test] data.size: ', data.size())
 
             if self.use_gpu:
                 data = data.cuda()
@@ -146,8 +149,13 @@ class ModuleTrain:
                 loss = self.loss(output, target)
             test_loss += loss.item()
 
+            predict = torch.argmax(output, 1)
+            correct += (predict == target).sum()
+
         test_loss /= len(self.test_loader.dataset)
-        print('[Test] set: Average loss: {:.4f}\n'.format(test_loss))
+        acc = correct / len(self.train_loader.dataset)
+
+        print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\n'.format(test_loss, acc))
         return test_loss
 
     def load(self, name):
@@ -160,18 +168,18 @@ class ModuleTrain:
         torch.save(self.model.state_dict(), name)
         # self.model.save(name)
 
-    def show_img(self, img_file, output, target):
-        # print(img_file)
-        # print(output)
-        # print(target)
-
-        img = cv2.imread(img_file)
-        h, w, c = img.shape
-        for i in range(len(target)/2):
-            cv2.circle(img, (int(target[2*i]*h/self.img_size), int(target[2*i+1]*h/self.img_size)), 3, (0, 255, 0), -1)
-
-        for i in range(len(output)/2):
-            cv2.circle(img, (int(output[2*i]*h/self.img_size), int(output[2*i+1]*h/self.img_size)), 3, (0, 0, 255), -1)
-
-        cv2.imshow('show_img_1', img)
-        cv2.waitKey(0)
+    # def show_img(self, img_file, output, target):
+    #     # print(img_file)
+    #     # print(output)
+    #     # print(target)
+    #
+    #     img = cv2.imread(img_file)
+    #     h, w, c = img.shape
+    #     for i in range(len(target)/2):
+    #         cv2.circle(img, (int(target[2*i]*h/self.img_size), int(target[2*i+1]*h/self.img_size)), 3, (0, 255, 0), -1)
+    #
+    #     for i in range(len(output)/2):
+    #         cv2.circle(img, (int(output[2*i]*h/self.img_size), int(output[2*i+1]*h/self.img_size)), 3, (0, 0, 255), -1)
+    #
+    #     cv2.imshow('show_img_1', img)
+    #     cv2.waitKey(0)

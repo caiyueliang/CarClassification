@@ -7,7 +7,7 @@ if __name__ == '__main__':
     train_path = '../Data/car_classifier_train/train'
     test_path = '../Data/car_classifier_train/test'
 
-    FILE_PATH = './Model/resnet18_params.pkl'
+    FILE_PATH = './model/resnet18_params.pkl'
     num_classes = 356
     batch_size = 64
     img_size = 224
