@@ -5,13 +5,13 @@ import numpy as np
 from PIL import Image
 from torch.autograd import Function
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import transforms as T
+from torchvision.datasets import ImageFolder
 from torchvision.transforms import functional
 from torch.autograd import Variable
-from torch.utils import data
+from torch.utils.data import DataLoader
 import cv2
 
 
@@ -62,13 +62,16 @@ class ModuleTrain:
         ])
 
         # Dataset
-        train_label = os.path.join(self.train_path, 'label.txt')
-        train_dataset = MyDataset(self.train_path, train_label, self.img_size, self.transform_test, is_train=True)
-        test_label = os.path.join(self.test_path, 'label.txt')
-        test_dataset = MyDataset(self.test_path, test_label, self.img_size, self.transform_test, is_train=False)
+        # train_label = os.path.join(self.train_path, 'label.txt')
+        # train_dataset = MyDataset(self.train_path, train_label, self.img_size, self.transform_test, is_train=True)
+        # test_label = os.path.join(self.test_path, 'label.txt')
+        # test_dataset = MyDataset(self.test_path, test_label, self.img_size, self.transform_test, is_train=False)
+        train_dataset = ImageFolder(root=self.train_path, transform=self.transform_train)
+        test_dataset = ImageFolder(root=self.test_path, transform=self.transform_test)
+
         # Data Loader (Input Pipeline)
-        self.train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-        self.test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+        self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+        self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
         # self.loss = F.mse_loss
         self.loss = F.smooth_l1_loss
