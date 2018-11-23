@@ -44,6 +44,29 @@ def data_pre_process_1(root_path, output_path, min_size):
     return
 
 
+def data_pre_process_2(root_path, output_path, count):
+    mkdir_if_not_exist(output_path)
+
+    mkdir_if_not_exist(output_path)
+    mkdir_if_not_exist(os.path.join(output_path, 'train'))
+    mkdir_if_not_exist(os.path.join(output_path, 'test'))
+
+    for root, dirs, files in os.walk(root_path):
+        for i, file in enumerate(files):
+            dir_path = root.split('/')[-1]
+            mkdir_if_not_exist(os.path.join(output_path, 'train', dir_path))
+            mkdir_if_not_exist(os.path.join(output_path, 'test', dir_path))
+
+            file_path = os.path.join(root, file)
+            print(file_path)
+            if i < count:
+                shutil.copy(file_path, os.path.join(output_path, 'test', dir_path, file))
+            else:
+                shutil.copy(file_path, os.path.join(output_path, 'train', dir_path, file))
+    return
+
+
 if __name__ == '__main__':
     # data_pre_process('../../Data/car_classifier', '../../Data/car_classifier_new')
-    data_pre_process_1('../../Data/car_classifier_new/', '../../Data/car_classifier_min_20/', 20)
+    # data_pre_process_1('../../Data/car_classifier_new/', '../../Data/car_classifier_min_50/', 50)
+    data_pre_process_2('../../Data/car_classifier_min_50/', '../../Data/car_classifier_train/', 10)
