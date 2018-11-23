@@ -64,8 +64,8 @@ class ModuleTrain:
         test_dataset = ImageFolder(root=self.test_path, transform=self.transform_test)
 
         # Data Loader (Input Pipeline)
-        self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-        self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+        self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+        self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
         # self.loss = F.mse_loss
         # self.loss = F.smooth_l1_loss
@@ -86,7 +86,7 @@ class ModuleTrain:
                 self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
             print('================================================')
-            for batch_idx, (data, target) in enumerate(self.train_loader):
+            for batch_idx, (data, target) in enumerate(self.train_loader):              # 训练
                 data, target = Variable(data), Variable(target)
 
                 if self.use_gpu:
@@ -95,14 +95,11 @@ class ModuleTrain:
 
                 # 梯度清0
                 self.optimizer.zero_grad()
-
                 # 计算损失
                 output = self.model(data)
                 loss = self.loss(output, target)
-
                 # 反向传播计算梯度
                 loss.backward()
-
                 # 更新参数
                 self.optimizer.step()
 
