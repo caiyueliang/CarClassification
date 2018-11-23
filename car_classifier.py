@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
     FILE_PATH = './model/resnet18_params.pkl'
     num_classes = 356
-    batch_size = 64
+    batch_size = 100
     img_size = 224
     lr = 1e-2
 
