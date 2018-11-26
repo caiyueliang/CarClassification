@@ -40,7 +40,8 @@ if __name__ == '__main__':
     print('batch_size: %d' % batch_size)
     print('lr: %s' % lr)
 
-    model = models.resnet18(num_classes=num_classes)
+    # model = models.resnet18(num_classes=num_classes)
+    model = models.squeezenet1_1(num_classes=num_classes)
     model_train = model_train.ModuleTrain(train_path, test_path, output_model_path, model=model, batch_size=batch_size,
                                           img_size=img_size, lr=lr)
 
