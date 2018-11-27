@@ -71,6 +71,7 @@ def data_pre_process_2(root_path, output_path, count):
     return
 
 
+# 每个类别里提取n张图片放到一个文件夹里
 def data_pre_process_3(root_path, output_path, count):
     mkdir_if_not_exist(output_path)
 
@@ -91,5 +92,5 @@ def data_pre_process_3(root_path, output_path, count):
 if __name__ == '__main__':
     # data_pre_process('../../Data/car_classifier', '../../Data/car_classifier_new')
     # data_pre_process_1('../../Data/car_classifier_new/', '../../Data/car_classifier_min_50/', 50)
-    data_pre_process_2('../../Data/car_classifier_min_50/', '../../Data/car_classifier_train/', 10)
-    # data_pre_process_3('../../Data/car_classifier_min_50/', '../../Data/car_classifier_1/', 20)
+    # data_pre_process_2('../../Data/car_classifier_min_50/', '../../Data/car_classifier_train/', 10)
+    data_pre_process_3('../../Data/car_classifier_min_50/', '../../Data/car_classifier_1/', 50)
