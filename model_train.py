@@ -46,7 +46,7 @@ class ModuleTrain:
         # RandomHorizontalFlip
         self.transform_train = T.Compose([
             T.RandomHorizontalFlip(),
-            T.RandomResizedCrop(size=self.img_size, scale=(0.5, 1.0), ratio=(3./4., 4./3.)),
+            T.RandomResizedCrop(size=self.img_size, scale=(0.08, 1.0), ratio=(3./4., 4./3.)),
             T.ToTensor(),
             T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
         ])
@@ -175,18 +175,3 @@ class ModuleTrain:
         torch.save(self.model.state_dict(), name)
         # self.model.save(name)
 
-    # def show_img(self, img_file, output, target):
-    #     # print(img_file)
-    #     # print(output)
-    #     # print(target)
-    #
-    #     img = cv2.imread(img_file)
-    #     h, w, c = img.shape
-    #     for i in range(len(target)/2):
-    #         cv2.circle(img, (int(target[2*i]*h/self.img_size), int(target[2*i+1]*h/self.img_size)), 3, (0, 255, 0), -1)
-    #
-    #     for i in range(len(output)/2):
-    #         cv2.circle(img, (int(output[2*i]*h/self.img_size), int(output[2*i+1]*h/self.img_size)), 3, (0, 0, 255), -1)
-    #
-    #     cv2.imshow('show_img_1', img)
-    #     cv2.waitKey(0)
