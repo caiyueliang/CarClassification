@@ -13,6 +13,7 @@ from torchvision.transforms import functional
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 import cv2
+import time
 
 
 class ModuleTrain:
@@ -136,6 +137,7 @@ class ModuleTrain:
         test_loss = 0.0
         correct = 0
 
+        time_start = time.time()
         # 测试集
         for data, target in self.test_loader:
             data, target = Variable(data), Variable(target)
@@ -155,9 +157,12 @@ class ModuleTrain:
             predict = torch.argmax(output, 1)
             correct += (predict == target).sum().data
 
+        time_end = time.time()
+        time_avg = float(time_end - time_start) / float(len(self.test_loader.dataset))
         test_loss /= len(self.test_loader.dataset)
         acc = float(correct) / float(len(self.test_loader.dataset))
-        print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\n'.format(test_loss, acc))
+
+        print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\t time: {:.6f} \n'.format(test_loss, acc, time_avg))
         return acc
 
     def load(self, name):
