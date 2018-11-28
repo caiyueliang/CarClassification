@@ -18,7 +18,7 @@ import time
 
 class ModuleTrain:
     def __init__(self, train_path, test_path, model_file, model, img_size=178, batch_size=8, lr=1e-3,
-                 re_train=False, best_acc=0.9):
+                 re_train=False, best_acc=0.6):
         self.train_path = train_path
         self.test_path = test_path
         self.model_file = model_file
@@ -113,7 +113,7 @@ class ModuleTrain:
 
             # print(correct)
             # print(len(self.train_loader.dataset))
-            train_loss /= len(self.train_loader.dataset)
+            train_loss /= len(self.train_loader)
             acc = float(correct) / float(len(self.train_loader.dataset))
             print('[Train] Epoch: {} \tLoss: {:.6f}\tAcc: {:.6f}\tlr: {}'.format(epoch_i, train_loss, acc, self.lr))
 
@@ -159,7 +159,7 @@ class ModuleTrain:
 
         time_end = time.time()
         time_avg = float(time_end - time_start) / float(len(self.test_loader.dataset))
-        test_loss /= len(self.test_loader.dataset)
+        test_loss /= len(self.test_loader)
         acc = float(correct) / float(len(self.test_loader.dataset))
 
         print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\t time: {:.6f} \n'.format(test_loss, acc, time_avg))
