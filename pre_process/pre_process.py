@@ -89,8 +89,29 @@ def data_pre_process_3(root_path, output_path, count):
     return
 
 
+# 每个类别里提取n张图片放到一个文件夹里
+def data_pre_process_4(root_path, output_path, count):
+    mkdir_if_not_exist(output_path)
+
+    mkdir_if_not_exist(output_path)
+    mkdir_if_not_exist(os.path.join(output_path))
+
+    for root, dirs, files in os.walk(root_path):
+        random.shuffle(files)
+
+        for i, file in enumerate(files):
+            file_path = os.path.join(root, file)
+            print(file_path)
+            if i < count:
+                shutil.move(file_path, os.path.join(output_path, file))
+    return
+
+
 if __name__ == '__main__':
     # data_pre_process('../../Data/car_classifier', '../../Data/car_classifier_new')
     # data_pre_process_1('../../Data/car_classifier_new/', '../../Data/car_classifier_min_50/', 50)
     # data_pre_process_2('../../Data/car_classifier_min_50/', '../../Data/car_classifier_train/', 10)
-    data_pre_process_3('../../Data/car_classifier_min_50/', '../../Data/car_classifier_1/', 50)
+    # data_pre_process_3('../../Data/car_classifier_min_50/', '../../Data/car_classifier_1/', 50)
+
+    data_pre_process_4('../../Data/head_tail_classifier/train/head/', '../../Data/head_tail_classifier/test/head/', 700)
+    data_pre_process_4('../../Data/head_tail_classifier/train/tail/', '../../Data/head_tail_classifier/test/tail/', 700)
