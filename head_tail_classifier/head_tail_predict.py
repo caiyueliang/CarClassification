@@ -95,7 +95,7 @@ class HeadTailPredict:
 def parse_argvs():
     parser = ArgumentParser(description='head_tail_classifier')
     # parser.add_argument("--model_path", type=str, help="model path", default='./model/htc_squeezenet.pkl')
-    parser.add_argument("--model_path", type=str, help="model path", default='./checkpoints/htc_resnet18.pkl')
+    parser.add_argument("--model_path", type=str, help="model path", default='./checkpoints/htc_resnet18_best.pkl')
     parser.add_argument('--classes_num', type=int, help='classes num', default=2)
     parser.add_argument('--img_size', type=int, help='imgsize', default=224)
 
