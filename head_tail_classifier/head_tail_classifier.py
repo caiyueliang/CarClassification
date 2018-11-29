@@ -11,7 +11,7 @@ def parse_argvs():
     parser.add_argument('--test_path', type=str, help='test path', default='../../Data/head_tail_classifier/test')
 
     # parser.add_argument("--output_model_path", type=str, help="model path", default='./model/htc_squeezenet.pkl')
-    parser.add_argument("--output_model_path", type=str, help="model path", default='./model/htc_resnet18.pkl')
+    parser.add_argument("--output_model_path", type=str, help="model path", default='./checkpoints/htc_resnet18.pkl')
     parser.add_argument('--classes_num', type=int, help='classes num', default=2)
     parser.add_argument('--batch_size', type=int, help='batch size', default=32)
     parser.add_argument('--img_size', type=int, help='imgsize', default=224)

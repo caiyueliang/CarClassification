@@ -8,6 +8,7 @@ __pycache__/
 
 .idea/
 model/
+head_tail_classifier/checkpoints/
 
 # Distribution / packaging
 .Python
