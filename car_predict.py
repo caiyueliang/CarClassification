@@ -51,6 +51,8 @@ class CarPredict:
 
         output = self.model(img_var)
         predict = torch.argmax(output, 1)
+        # print(train_dataset.classes)
+
         return predict.item()
 
     def predict_image(self, root_path):
