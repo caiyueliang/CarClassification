@@ -105,7 +105,7 @@ class HeadTailPredict:
             str_list = file.split('/')
             save_image_name = str_list[-1]
             if label == 0:
-                shutil.move(file, os.path.join(head_path, save_image_name))
+                shutil.copy(file, os.path.join(head_path, save_image_name))
         return
 
     def predict_tail_image(self, root_path, output_path):
@@ -127,7 +127,7 @@ class HeadTailPredict:
             str_list = file.split('/')
             save_image_name = str_list[-1]
             if label == 1:
-                shutil.move(file, os.path.join(tail_path, save_image_name))
+                shutil.copy(file, os.path.join(tail_path, save_image_name))
         return
 
     def load(self, name):
