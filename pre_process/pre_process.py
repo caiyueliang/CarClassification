@@ -113,5 +113,14 @@ if __name__ == '__main__':
     # data_pre_process_2('../../Data/car_classifier_min_50/', '../../Data/car_classifier_train/', 10)
     # data_pre_process_3('../../Data/car_classifier_min_50/', '../../Data/car_classifier_1/', 50)
 
-    data_pre_process_4('../../Data/head_tail_classifier/train/head/', '../../Data/head_tail_classifier/test/head/', 700)
-    data_pre_process_4('../../Data/head_tail_classifier/train/tail/', '../../Data/head_tail_classifier/test/tail/', 700)
+    # data_pre_process_4('../../Data/head_tail_classifier/train/head/', '../../Data/head_tail_classifier/test/head/', 700)
+    # data_pre_process_4('../../Data/head_tail_classifier/train/tail/', '../../Data/head_tail_classifier/test/tail/', 700)
+
+    # 拆分车牌头的图片
+    # data_pre_process('../../Data/car_head_classifier/head', '../../Data/head_classifier')
+    # data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_1/', 1)
+    # data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_20/', 20)
+    # data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_40/', 40)
+    data_pre_process_2('../../Data/car_classifier/head_classifier_min_40/', '../../Data/car_classifier/head_classifier_train/', 5)
+
+    # data_pre_process('../../Data/car_head_classifier/tail', '../../Data/tail_classifier')
