@@ -59,10 +59,6 @@ class ModuleTrain:
         ])
 
         # Dataset
-        # train_label = os.path.join(self.train_path, 'label.txt')
-        # train_dataset = MyDataset(self.train_path, train_label, self.img_size, self.transform_test, is_train=True)
-        # test_label = os.path.join(self.test_path, 'label.txt')
-        # test_dataset = MyDataset(self.test_path, test_label, self.img_size, self.transform_test, is_train=False)
         train_dataset = ImageFolder(root=self.train_path, transform=self.transform_train)
         test_dataset = ImageFolder(root=self.test_path, transform=self.transform_test)
 
@@ -70,8 +66,6 @@ class ModuleTrain:
         self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
         self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
-        # self.loss = F.mse_loss
-        # self.loss = F.smooth_l1_loss
         self.loss = F.cross_entropy
 
         self.lr = lr

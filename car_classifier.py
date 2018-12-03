@@ -15,7 +15,7 @@ def parse_argvs():
     parser.add_argument("--output_model_path", type=str, help="output model path", default='./model/cc_resnet18_params.pkl')
     parser.add_argument('--classes_num', type=int, help='classes num', default=100)
     parser.add_argument('--batch_size', type=int, help='batch size', default=32)
-    parser.add_argument('--img_size', type=int, help='imgsize', default=224)
+    parser.add_argument('--img_size', type=int, help='img size', default=224)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
 
     input_args = parser.parse_args()
