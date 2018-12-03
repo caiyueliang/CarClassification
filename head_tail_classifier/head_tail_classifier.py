@@ -15,7 +15,7 @@ def parse_argvs():
     parser.add_argument('--classes_num', type=int, help='classes num', default=2)
     parser.add_argument('--batch_size', type=int, help='batch size', default=32)
     parser.add_argument('--img_size', type=int, help='imgsize', default=224)
-    parser.add_argument('--lr', type=float, help='learning rate', default=0.001)
+    parser.add_argument('--lr', type=float, help='learning rate', default=0.0001)
 
     input_args = parser.parse_args()
     print(input_args)

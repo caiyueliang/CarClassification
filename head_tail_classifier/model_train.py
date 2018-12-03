@@ -47,7 +47,7 @@ class ModuleTrain:
         self.transform_train = T.Compose([
             T.RandomHorizontalFlip(),
             T.RandomResizedCrop(size=self.img_size, scale=(0.08, 1.0), ratio=(3./4., 4./3.)),
-            T.RandomRotation(10),
+            T.RandomRotation(20),
             T.ToTensor(),
             T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
         ])

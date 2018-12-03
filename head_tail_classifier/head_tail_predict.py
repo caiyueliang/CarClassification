@@ -86,6 +86,50 @@ class HeadTailPredict:
             # shutil.copy(file, os.path.join(output_path, new_dir, name_list[2]))
         return
 
+    def predict_head_image(self, root_path, output_path):
+        files_list = list()
+
+        for root, dirs, files in os.walk(root_path):
+            for file in files:
+                files_list.append(os.path.join(root, file))
+
+        head_path = os.path.join(output_path, 'head')
+        mkdir_if_not_exist(output_path)
+        mkdir_if_not_exist(head_path)
+
+        for file in files_list:
+            print(file)
+            image = cv2.imread(file)
+            label = self.predict(image)
+
+            str_list = file.split('/')
+            save_image_name = str_list[-1]
+            if label == 0:
+                shutil.move(file, os.path.join(head_path, save_image_name))
+        return
+
+    def predict_tail_image(self, root_path, output_path):
+        files_list = list()
+
+        for root, dirs, files in os.walk(root_path):
+            for file in files:
+                files_list.append(os.path.join(root, file))
+
+        tail_path = os.path.join(output_path, 'tail')
+        mkdir_if_not_exist(output_path)
+        mkdir_if_not_exist(tail_path)
+
+        for file in files_list:
+            print(file)
+            image = cv2.imread(file)
+            label = self.predict(image)
+
+            str_list = file.split('/')
+            save_image_name = str_list[-1]
+            if label == 1:
+                shutil.move(file, os.path.join(tail_path, save_image_name))
+        return
+
     def load(self, name):
         print('[Load model] %s ...' % name)
         self.model.load_state_dict(torch.load(name))
@@ -115,8 +159,9 @@ if __name__ == '__main__':
     print('img_size: %d' % img_size)
 
     model = models.resnet18(num_classes=num_classes)
-    # model = models.squeezenet1_1(num_classes=num_classes)
     predict = HeadTailPredict(model=model, model_file=model_path, img_size=img_size)
 
-    predict.predict_image('../../Data/car_classifier_new/', '../../Data/car_head_classifier/')
-    # model_train.test(show_img=True)
+    # predict.predict_image('../../Data/car_classifier_new/', '../../Data/car_head_classifier/')
+
+    predict.predict_head_image('../../Data/car_head_classifier/tail/', '../../Data/car_head_classifier_1/')
+    predict.predict_tail_image('../../Data/car_head_classifier/head/', '../../Data/car_head_classifier_1/')
