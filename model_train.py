@@ -64,7 +64,7 @@ class ModuleTrain:
         train_dataset = ImageFolder(root=self.train_path, transform=self.transform_train)
         test_dataset = ImageFolder(root=self.test_path, transform=self.transform_test)
         # for name in train_dataset.classes:
-        #     print name
+        #     print '"%s",' % name,
 
         # Data Loader (Input Pipeline)
         self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
