@@ -103,5 +103,5 @@ if __name__ == '__main__':
     model = models.resnet18(num_classes=num_classes)
     predict = CarPredict(model=model, model_file=model_path, img_size=img_size)
 
-    predict.predict_image('../../Data/car_classifier/vanke_car/data_clean/')
+    predict.predict_image('../Data/car_classifier/vanke_car_sign/')
 
