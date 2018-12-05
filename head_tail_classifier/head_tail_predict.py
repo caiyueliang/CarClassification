@@ -76,11 +76,14 @@ class HeadTailPredict:
             label = self.predict(image)
 
             str_list = file.split('/')
-            save_image_name = str_list[-2] + '_' + str_list[-1]
+            mkdir_if_not_exist(os.path.join(head_path, str_list[-2]))
+            mkdir_if_not_exist(os.path.join(tail_path, str_list[-2]))
+
+            save_image_name = str_list[-1]
             if label == 0:
-                shutil.copy(file, os.path.join(head_path, save_image_name))
+                shutil.copy(file, os.path.join(head_path, str_list[-2], save_image_name))
             elif label == 1:
-                shutil.copy(file, os.path.join(tail_path, save_image_name))
+                shutil.copy(file, os.path.join(tail_path, str_list[-2], save_image_name))
             # cv2.waitKey(0)
 
             # shutil.copy(file, os.path.join(output_path, new_dir, name_list[2]))
@@ -160,7 +163,7 @@ if __name__ == '__main__':
     model = models.resnet18(num_classes=num_classes)
     predict = HeadTailPredict(model=model, model_file=model_path, img_size=img_size)
 
-    # predict.predict_image('../../Data/car_classifier_new/', '../../Data/car_head_classifier/')
+    predict.predict_image('../../Data/car_classifier/aodi_head/', '../../Data/car_classifier/aodi_head_1/')
 
-    predict.predict_head_image('../../Data/car_head_classifier/tail/', '../../Data/car_head_classifier_1/')
-    predict.predict_tail_image('../../Data/car_head_classifier/head/', '../../Data/car_head_classifier_1/')
+    # predict.predict_head_image('../../Data/car_head_classifier/tail/', '../../Data/car_head_classifier_1/')
+    # predict.predict_tail_image('../../Data/car_head_classifier/head/', '../../Data/car_head_classifier_1/')
