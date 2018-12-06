@@ -1,18 +1,13 @@
 # encoding:utf-8
 import os
-import random
-import numpy as np
-from PIL import Image
-from torch.autograd import Function
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import transforms as T
-from torchvision.datasets import ImageFolder
-from torchvision.transforms import functional
+# from torchvision.datasets import ImageFolder
+from my_folder import ImageFolder
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-import cv2
 import time
 
 
