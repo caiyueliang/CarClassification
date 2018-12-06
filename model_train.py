@@ -56,7 +56,7 @@ class ModuleTrain:
         ])
 
         # Dataset
-        train_dataset = ImageFolder(root=self.train_path, transform=self.transform_train)
+        train_dataset = ImageFolder(root=self.train_path, transform=self.transform_train, train=True)
         test_dataset = ImageFolder(root=self.test_path, transform=self.transform_test)
         # for name in train_dataset.classes:
         #     print '"%s",' % name,

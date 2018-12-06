@@ -5,6 +5,7 @@ from PIL import Image
 
 import os
 import os.path
+import random
 
 
 def has_file_allowed_extension(filename, extensions):
@@ -29,6 +30,8 @@ def find_classes(dir):
 
 def make_dataset(dir, class_to_idx, extensions):
     images = []
+    max_class_num = 0
+
     dir = os.path.expanduser(dir)
     for target in sorted(os.listdir(dir)):
         d = os.path.join(dir, target)
@@ -36,19 +39,34 @@ def make_dataset(dir, class_to_idx, extensions):
             continue
 
         for root, _, fnames in sorted(os.walk(d)):
+            class_num = len(fnames)
+            # print str(class_num) + ' ',
+            if class_num > max_class_num:
+                max_class_num = class_num
+
             for fname in sorted(fnames):
                 if has_file_allowed_extension(fname, extensions):
                     path = os.path.join(root, fname)
                     item = (path, class_to_idx[target])
                     images.append(item)
 
-    return images
+    return images, max_class_num
 
 
 # 类别重组法
-def class_shuffle(old_samples):
+def class_shuffle(old_samples, class_num, max_class_num):
     images = []
 
+    for i in range(class_num):
+        class_list = [image for image in old_samples if image[1] == i]
+        # print("[class_shuffle] class_list len: %d" % len(class_list))
+
+        shuffle_list = range(max_class_num)
+        random.shuffle(shuffle_list)
+        for n in shuffle_list:
+            images.append(class_list[n % len(class_list)])
+
+    random.shuffle(images)
     return images
 
 
@@ -79,15 +97,18 @@ class DatasetFolder(data.Dataset):
         samples (list): List of (sample path, class_index) tuples
     """
 
-    def __init__(self, root, loader, extensions, transform=None, target_transform=None):
+    def __init__(self, root, loader, extensions, transform=None, target_transform=None, train=False):
         classes, class_to_idx = find_classes(root)
-        print('[init] classes idx: %s ' % class_to_idx)
+        # print('[init] classes idx: %s; len: %d' % (class_to_idx, len(classes)))
 
-        samples = make_dataset(root, class_to_idx, extensions)
-        # samples = class_shuffle(samples)
-        print('[init] samples len: %d ' % len(samples))
-        path, target = samples[0]
-        print('[init] samples[0]: %s, %d ' % (path, target))
+        samples, max_class_num = make_dataset(root, class_to_idx, extensions)
+        print('[init] samples len: %d; classes num: %d; max_class_num: %d' % (len(samples), len(classes), max_class_num))
+        if train:
+            samples = class_shuffle(samples, len(classes), max_class_num)
+            print('[init] use class_shuffle... samples len: %d ' % len(samples))
+            assert len(samples) == (len(classes) * max_class_num)
+        else:
+            print('[init] not use class_shuffle...')
 
         if len(samples) == 0:
             raise(RuntimeError("Found 0 files in subfolders of: " + root + "\n"
@@ -187,8 +208,9 @@ class ImageFolder(DatasetFolder):
         imgs (list): List of (image path, class_index) tuples
     """
     def __init__(self, root, transform=None, target_transform=None,
-                 loader=default_loader):
+                 loader=default_loader, train=False):
         super(ImageFolder, self).__init__(root, loader, IMG_EXTENSIONS,
                                           transform=transform,
-                                          target_transform=target_transform)
+                                          target_transform=target_transform,
+                                          train=train)
         self.imgs = self.samples
