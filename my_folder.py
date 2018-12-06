@@ -46,20 +46,8 @@ def make_dataset(dir, class_to_idx, extensions):
 
 
 # 类别重组法
-def make_dataset_class_shuffle(dir, class_to_idx, extensions):
+def class_shuffle(old_samples):
     images = []
-    dir = os.path.expanduser(dir)
-    for target in sorted(os.listdir(dir)):
-        d = os.path.join(dir, target)
-        if not os.path.isdir(d):
-            continue
-
-        for root, _, fnames in sorted(os.walk(d)):
-            for fname in sorted(fnames):
-                if has_file_allowed_extension(fname, extensions):
-                    path = os.path.join(root, fname)
-                    item = (path, class_to_idx[target])
-                    images.append(item)
 
     return images
 
@@ -93,12 +81,13 @@ class DatasetFolder(data.Dataset):
 
     def __init__(self, root, loader, extensions, transform=None, target_transform=None):
         classes, class_to_idx = find_classes(root)
-        print('[init] classes: %s ' % classes)
         print('[init] classes idx: %s ' % class_to_idx)
 
-        samples = make_dataset_class_shuffle(root, class_to_idx, extensions)
         samples = make_dataset(root, class_to_idx, extensions)
+        # samples = class_shuffle(samples)
         print('[init] samples len: %d ' % len(samples))
+        path, target = samples[0]
+        print('[init] samples[0]: %s, %d ' % (path, target))
 
         if len(samples) == 0:
             raise(RuntimeError("Found 0 files in subfolders of: " + root + "\n"
