@@ -61,5 +61,5 @@ if __name__ == '__main__':
     # model = models.squeezenet1_1(num_classes=num_classes)
     model_train = model_train.ModuleTrain(opt=args)
 
-    model_train.train(200, 80)
+    model_train.train()
     # model_train.test(show_img=True)
