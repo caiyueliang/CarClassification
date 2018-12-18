@@ -128,7 +128,7 @@ class ModuleTrain:
 
         fake_img = self.netg(noises)
         scores = self.netd(fake_img).data
-
+        print(scores)
         indexs = scores.topk(self.opt.gen_num)[1]
         result = list()
         for ii in indexs:
