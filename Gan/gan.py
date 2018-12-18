@@ -10,7 +10,7 @@ def parse_argvs():
     parser.add_argument('--data_path', type=str, help='data_path', default='./data')
 
     parser.add_argument('--num_workers', type=int, help='num_workers', default=1)
-    parser.add_argument('--image_size', type=int, help='image_size', default=96)
+    parser.add_argument('--img_size', type=int, help='image_size', default=96)
     parser.add_argument('--batch_size', type=int, help='batch_size', default=32)
     parser.add_argument('--max_epoch', type=int, help='max_epoch', default=200)
     parser.add_argument('--lr1', type=float, help='learning rate 1', default=2e-4)

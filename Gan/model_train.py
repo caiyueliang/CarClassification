@@ -5,8 +5,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 from torchvision import transforms as T
-# from torchvision.datasets import ImageFolder
-from my_folder import ImageFolder
+from torchvision.datasets import ImageFolder
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from models.discriminator import Discriminator
@@ -40,7 +39,7 @@ class ModuleTrain:
             T.ToTensor(),
             T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
         ])
-        train_dataset = ImageFolder(root=self.opt.data_path, transform=self.transform_train, train=True)
+        train_dataset = ImageFolder(root=self.opt.data_path, transform=self.transform_train)
         self.train_loader = DataLoader(dataset=train_dataset, batch_size=self.opt.batch_size, shuffle=True,
                                        num_workers=self.opt.num_workers, drop_last=True)
 
