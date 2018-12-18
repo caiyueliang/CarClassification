@@ -117,12 +117,12 @@ class ModuleTrain:
 
                     loss_netg += error_g
 
-                    loss_netd /= (len(self.train_loader) * 2)
-                    loss_netg /= len(self.train_loader)
+            loss_netd /= (len(self.train_loader) * 2)
+            loss_netg /= len(self.train_loader)
             print('[Train] Epoch: {} \tNetD Loss: {:.6f} \tNetG Loss: {:.6f}'.format(epoch_i, loss_netd, loss_netg))
             if save_best is True:
-                if loss_netg < self.best_loss:
-                    self.best_loss = loss_netg
+                if (loss_netg + loss_netd) / 2 < self.best_loss:
+                    self.best_loss = (loss_netg + loss_netd) / 2
                     self.save(self.netd, self.opt.best_netd_path)        # 保存最好的模型
                     self.save(self.netg, self.opt.best_netg_path)        # 保存最好的模型
                     print('[save best] ...')
