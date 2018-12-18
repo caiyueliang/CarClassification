@@ -8,68 +8,67 @@ from torchvision import transforms as T
 from my_folder import ImageFolder
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
+from models.discriminator import Discriminator
+from models.generator import Generator
 import time
 
 
 class ModuleTrain:
-    def __init__(self, train_path, test_path, model_file, model, img_size=178, batch_size=8, lr=1e-3,
-                 re_train=False, best_acc=0.6):
-        self.train_path = train_path
-        self.test_path = test_path
-        self.model_file = model_file
-        self.img_size = img_size
-        self.batch_size = batch_size
-        self.re_train = re_train                        # 不加载训练模型，重新进行训练
+    def __init__(self, opt, best_acc=0.6):
+        self.opt = opt
         self.best_acc = best_acc                        # 正确率这个值，才会保存模型
 
-        if torch.cuda.is_available():
-            self.use_gpu = True
-        else:
-            self.use_gpu = False
-
-        # 模型
-        self.model = model
-
-        if self.use_gpu:
-            print('[use gpu] ...')
-            self.model = self.model.cuda()
+        self.netd = Discriminator(self.opt)
+        self.netg = Generator(self.opt)
+        self.use_gpu = False
 
         # 加载模型
-        if os.path.exists(self.model_file) and not self.re_train:
-            self.load(self.model_file)
+        if os.path.exists(self.opt.netd_path):
+            self.load(self.opt.netd_path)
         else:
-            print('[Load model] error !!!')
+            print('[Load model] error: %s not exist !!!' % self.opt.netd_path)
+        if os.path.exists(self.opt.netg_path):
+            self.load(self.opt.netg_path)
+        else:
+            print('[Load model] error: %s not exist !!!' % self.opt.netg_path)
 
-        # RandomHorizontalFlip
+        # DataLoader初始化
         self.transform_train = T.Compose([
-            T.RandomHorizontalFlip(),
-            T.RandomResizedCrop(size=self.img_size, scale=(0.08, 1.0), ratio=(3./4., 4./3.)),
-            T.RandomRotation(20),
+            T.Resize((self.opt.img_size, self.opt.img_size)),
             T.ToTensor(),
             T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
         ])
+        train_dataset = ImageFolder(root=self.opt.data_path, transform=self.transform_train, train=True)
+        self.train_loader = DataLoader(dataset=train_dataset, batch_size=self.opt.batch_size, shuffle=True,
+                                       num_workers=self.opt.num_workers, drop_last=True)
 
-        self.transform_test = T.Compose([
-            T.Resize((self.img_size, self.img_size)),
-            T.ToTensor(),
-            T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5])
-        ])
-
-        # Dataset
-        train_dataset = ImageFolder(root=self.train_path, transform=self.transform_train, train=True)
-        test_dataset = ImageFolder(root=self.test_path, transform=self.transform_test)
-        # for name in train_dataset.classes:
-        #     print '"%s",' % name,
-
-        # Data Loader (Input Pipeline)
-        self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-        self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
-
-        self.loss = F.cross_entropy
-
-        self.lr = lr
+        # 优化器和损失函数
         # self.optimizer = optim.SGD(self.model.parameters(), lr=self.lr, momentum=0.5)
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
+        self.optimizer_g = optim.Adam(self.netg.parameters(), lr=self.opt.lr1, betas=(self.opt.beta1, 0.999))
+        self.optimizer_d = optim.Adam(self.netd.parameters(), lr=self.opt.lr2, betas=(self.opt.beta1, 0.999))
+        self.criterion = torch.nn.BCELoss()
+
+        self.true_labels = Variable(torch.ones(self.opt.batch_size))
+        self.fake_labels = Variable(torch.zeros(self.opt.batch_size))
+        self.fix_noises = Variable(torch.randn(self.opt.batch_size, self.opt.nz, 1, 1))
+        self.noises = Variable(torch.randn(self.opt.batch_size, self.opt.nz, 1, 1))
+
+        # gpu or cpu
+        if self.opt.use_gpu and torch.cuda.is_available():
+            self.use_gpu = True
+        else:
+            self.use_gpu = False
+        if self.use_gpu:
+            print('[use gpu] ...')
+            self.netd.cuda()
+            self.netg.cuda()
+            self.criterion.cuda()
+            self.true_labels = self.true_labels.cuda()
+            self.fake_labels = self.fake_labels.cuda()
+            self.fix_noises = self.fix_noises.cuda()
+            self.noises = self.noises.cuda()
+        else:
+            print('[use cpu] ...')
 
         pass
 

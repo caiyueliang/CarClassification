@@ -49,26 +49,17 @@ def parse_argvs():
 if __name__ == '__main__':
     args = parse_argvs()
 
-    train_path = args.train_path
-    test_path = args.test_path
-    output_model_path = args.output_model_path
-    num_classes = args.classes_num
-    batch_size = args.batch_size
-    img_size = args.img_size
-    lr = args.lr
+    # train_path = args.train_path
+    # test_path = args.test_path
+    # output_model_path = args.output_model_path
+    # num_classes = args.classes_num
+    # batch_size = args.batch_size
+    # img_size = args.img_size
+    # lr = args.lr
 
-    print('train_path: %s' % train_path)
-    print('test_path: %s' % test_path)
-    print('output_model_path: %s' % output_model_path)
-    print('num_classes: %d' % num_classes)
-    print('img_size: %d' % img_size)
-    print('batch_size: %d' % batch_size)
-    print('lr: %s' % lr)
-
-    model = models.resnet18(num_classes=num_classes)
+    # model = models.resnet18(num_classes=num_classes)
     # model = models.squeezenet1_1(num_classes=num_classes)
-    model_train = model_train.ModuleTrain(train_path, test_path, output_model_path, model=model, batch_size=batch_size,
-                                          img_size=img_size, lr=lr)
+    model_train = model_train.ModuleTrain(opt=args)
 
     model_train.train(200, 80)
     # model_train.test(show_img=True)
