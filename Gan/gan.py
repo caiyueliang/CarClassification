@@ -12,7 +12,7 @@ def parse_argvs():
     parser.add_argument('--num_workers', type=int, help='num_workers', default=1)
     parser.add_argument('--img_size', type=int, help='image_size', default=96)
     parser.add_argument('--batch_size', type=int, help='batch_size', default=32)
-    parser.add_argument('--max_epoch', type=int, help='max_epoch', default=200)
+    parser.add_argument('--max_epoch', type=int, help='max_epoch', default=1000)
     parser.add_argument('--lr1', type=float, help='learning rate 1', default=2e-4)
     parser.add_argument('--lr2', type=float, help='learning rate 2', default=2e-4)
     parser.add_argument('--beta1', type=float, help='Adam beta1', default=0.5)

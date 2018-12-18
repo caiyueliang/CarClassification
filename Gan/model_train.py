@@ -76,7 +76,8 @@ class ModuleTrain:
     def train(self, save_best=True):
         print('[train] epoch: %d' % self.opt.max_epoch)
         for epoch_i in range(self.opt.max_epoch):
-            train_loss = 0.0
+            loss_netd = 0.0
+            loss_netg = 0.0
             correct = 0
 
             print('================================================')
@@ -101,6 +102,8 @@ class ModuleTrain:
                     error_d_fake.backward()
                     self.optimizer_d.step()
 
+                    loss_netd += (error_d_real.item() + error_d_fake.item())
+
                 # 训练生成器
                 if (ii + 1) % self.opt.g_every == 0:
                     self.optimizer_g.zero_grad()
@@ -112,6 +115,11 @@ class ModuleTrain:
                     error_g.backward()
                     self.optimizer_g.step()
 
+                    loss_netd /= (len(self.train_loader) * 2)
+            print('[Train] Epoch: {} \tNetD Loss: {:.6f}'.format(epoch_i, loss_netd))
+
+            # self.vis()
+
             if (epoch_i + 1) % 5 == 0:
                 self.image_gan()
 
@@ -121,14 +129,14 @@ class ModuleTrain:
 
     def image_gan(self):
         noises = torch.randn(self.opt.gen_search_num, self.opt.nz, 1, 1).normal_(self.opt.gen_mean, self.opt.gen_std)
-        noises = Variable(noises, volatile=True)
+        with torch.no_grad():
+            noises = Variable(noises)
 
         if self.use_gpu:
             noises = noises.cuda()
 
         fake_img = self.netg(noises)
         scores = self.netd(fake_img).data
-        print(scores)
         indexs = scores.topk(self.opt.gen_num)[1]
         result = list()
         for ii in indexs:
