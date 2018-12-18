@@ -120,7 +120,7 @@ class ModuleTrain:
         visdom.images(fix_fake_imgs.data.cpu().numpy()[:64] * 0.5 + 0.5, win='fixfake')
 
     def image_gan(self):
-        noises = torch.randn(self.opt.batch_size, self.opt.nz, 1, 1).normal_(self.opt.gen_mean, self.opt.gen_std)
+        noises = torch.randn(self.opt.gen_search_num, self.opt.nz, 1, 1).normal_(self.opt.gen_mean, self.opt.gen_std)
         noises = Variable(noises, volatile=True)
 
         if self.use_gpu:
