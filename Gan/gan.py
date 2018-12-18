@@ -12,7 +12,7 @@ def parse_argvs():
     parser.add_argument('--num_workers', type=int, help='num_workers', default=1)
     parser.add_argument('--img_size', type=int, help='image_size', default=96)
     parser.add_argument('--batch_size', type=int, help='batch_size', default=8)
-    parser.add_argument('--max_epoch', type=int, help='max_epoch', default=1000)
+    parser.add_argument('--max_epoch', type=int, help='max_epoch', default=10000)
     parser.add_argument('--lr1', type=float, help='learning rate 1', default=2e-4)
     parser.add_argument('--lr2', type=float, help='learning rate 2', default=2e-4)
     parser.add_argument('--beta1', type=float, help='Adam beta1', default=0.5)
@@ -30,10 +30,12 @@ def parse_argvs():
 
     parser.add_argument('--debug_file', type=str, help='存在该文件夹、进入debug模式', default='./tmp/debug_gan')
     parser.add_argument('--d_every', type=int, help='每1个batch训练一次判别器', default=1)
-    parser.add_argument('--g_every', type=int, help='每5个batch训练一次生成器', default=5)
+    parser.add_argument('--g_every', type=int, help='每5个batch训练一次生成器', default=1)
     parser.add_argument('--decay_every', type=int, help='每10个epoch保存一次模型', default=10)
     parser.add_argument('--netd_path', type=str, help='model_path', default='./checkpoints/netd.pth')
+    parser.add_argument('--best_netd_path', type=str, help='model_path', default='./checkpoints/netd_best.pth')
     parser.add_argument('--netg_path', type=str, help='model_path', default='./checkpoints/netg.pth')
+    parser.add_argument('--best_netg_path', type=str, help='model_path', default='./checkpoints/netg_best.pth')
 
     parser.add_argument('--gen_img', type=str, help='gen_img', default='result.png')
     parser.add_argument('--gen_num', type=int, help='从512张生成的图片中保存最好的64张', default=64)

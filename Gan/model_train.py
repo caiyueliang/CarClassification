@@ -15,9 +15,9 @@ import visdom
 
 
 class ModuleTrain:
-    def __init__(self, opt, best_acc=0.6):
+    def __init__(self, opt, best_loss=0.2):
         self.opt = opt
-        self.best_acc = best_acc                        # 正确率这个值，才会保存模型
+        self.best_loss = best_loss                        # 正确率这个值，才会保存模型
 
         self.netd = Discriminator(self.opt)
         self.netg = Generator(self.opt)
@@ -25,11 +25,11 @@ class ModuleTrain:
 
         # 加载模型
         if os.path.exists(self.opt.netd_path):
-            self.load(self.opt.netd_path)
+            self.load_netd(self.opt.netd_path)
         else:
             print('[Load model] error: %s not exist !!!' % self.opt.netd_path)
         if os.path.exists(self.opt.netg_path):
-            self.load(self.opt.netg_path)
+            self.load_netg(self.opt.netg_path)
         else:
             print('[Load model] error: %s not exist !!!' % self.opt.netg_path)
 
@@ -115,13 +115,25 @@ class ModuleTrain:
                     error_g.backward()
                     self.optimizer_g.step()
 
+                    loss_netg += error_g
+
                     loss_netd /= (len(self.train_loader) * 2)
-            print('[Train] Epoch: {} \tNetD Loss: {:.6f}'.format(epoch_i, loss_netd))
+                    loss_netg /= len(self.train_loader)
+            print('[Train] Epoch: {} \tNetD Loss: {:.6f} \tNetG Loss: {:.6f}'.format(epoch_i, loss_netd, loss_netg))
+            if save_best is True:
+                if loss_netg < self.best_loss:
+                    self.best_loss = loss_netg
+                    self.save(self.netd, self.opt.best_netd_path)        # 保存最好的模型
+                    self.save(self.netg, self.opt.best_netg_path)        # 保存最好的模型
+                    print('[save best] ...')
 
             # self.vis()
 
             if (epoch_i + 1) % 5 == 0:
                 self.image_gan()
+
+        self.save(self.netd, self.opt.netd_path)  # 保存最好的模型
+        self.save(self.netg, self.opt.netg_path)  # 保存最好的模型
 
     def vis(self):
         fix_fake_imgs = self.netg(self.opt.fix_noises)
@@ -198,13 +210,16 @@ class ModuleTrain:
         print('[Test] set: Test loss: {:.6f}\t Acc: {:.6f}\t time: {:.6f} \n'.format(test_loss, acc, time_avg))
         return acc
 
-    def load(self, name):
-        print('[Load model] %s ...' % name)
-        self.model.load_state_dict(torch.load(name))
-        # self.model.load(name)
+    def load_netd(self, name):
+        print('[Load model netd] %s ...' % name)
+        self.netd.load_state_dict(torch.load(name))
 
-    def save(self, name):
+    def load_netg(self, name):
+        print('[Load model netg] %s ...' % name)
+        self.netg.load_state_dict(torch.load(name))
+
+    def save(self, model, name):
         print('[Save model] %s ...' % name)
-        torch.save(self.model.state_dict(), name)
+        torch.save(model.state_dict(), name)
         # self.model.save(name)
 
