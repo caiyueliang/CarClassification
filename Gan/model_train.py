@@ -3,6 +3,7 @@ import os
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
+import torchvision
 from torchvision import transforms as T
 # from torchvision.datasets import ImageFolder
 from my_folder import ImageFolder
@@ -11,6 +12,7 @@ from torch.utils.data import DataLoader
 from models.discriminator import Discriminator
 from models.generator import Generator
 import time
+import visdom
 
 
 class ModuleTrain:
@@ -110,6 +112,30 @@ class ModuleTrain:
                     error_g = self.criterion(fake_output, self.true_labels)
                     error_g.backward()
                     self.optimizer_g.step()
+
+            if (epoch_i + 1) % 5 == 0:
+                self.image_gan()
+
+    def vis(self):
+        fix_fake_imgs = self.netg(self.opt.fix_noises)
+        visdom.images(fix_fake_imgs.data.cpu().numpy()[:64] * 0.5 + 0.5, win='fixfake')
+
+    def image_gan(self):
+        noises = torch.randn(self.opt.batch_size, self.opt.nz, 1, 1).normal_(self.opt.gen_mean, self.opt.gen_std)
+        noises = Variable(noises, volatile=True)
+
+        if self.use_gpu:
+            noises = noises.cuda()
+
+        fake_img = self.netg(noises)
+        scores = self.netd(fake_img).data
+
+        indexs = scores.topk(self.opt.gen_num)[1]
+        result = list()
+        for ii in indexs:
+            result.append(fake_img.data[ii])
+
+        torchvision.utils.save_image(torch.stack(result), self.opt.gen_img, normalize=True, range=(-1, 1))
 
         #     # print(correct)
         #     # print(len(self.train_loader.dataset))
