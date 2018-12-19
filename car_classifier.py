@@ -8,12 +8,12 @@ from torchvision import models
 def parse_argvs():
     parser = ArgumentParser(description='car_classifier')
     parser.add_argument('--train_path', type=str, help='train dataset path',
-                        default='../Data/car_classifier/head_classifier_train/train')
+                        default='../Data/car_classifier/classifier_train_best/train')
     parser.add_argument('--test_path', type=str, help='test dataset path',
-                        default='../Data/car_classifier/head_classifier_train/test')
+                        default='../Data/car_classifier/classifier_train_best/test')
 
     parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints/cc_resnet18.pkl')
-    parser.add_argument('--classes_num', type=int, help='classes num', default=116)
+    parser.add_argument('--classes_num', type=int, help='classes num', default=40)
     parser.add_argument('--batch_size', type=int, help='batch size', default=32)
     parser.add_argument('--img_size', type=int, help='img size', default=224)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)

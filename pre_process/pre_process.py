@@ -120,7 +120,7 @@ if __name__ == '__main__':
     # data_pre_process('../../Data/car_head_classifier/head', '../../Data/head_classifier')
     # data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_1/', 1)
     # data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_20/', 20)
-    data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_40/', 40)
-    data_pre_process_2('../../Data/car_classifier/head_classifier_min_40/', '../../Data/car_classifier/head_classifier_train/', 5)
+    # data_pre_process_1('../../Data/car_classifier/head_classifier/', '../../Data/car_classifier/head_classifier_min_40/', 40)
+    data_pre_process_2('../../Data/car_classifier/clean_car/car_data/', '../../Data/car_classifier/classifier_train_best/', 30)
 
     # data_pre_process('../../Data/car_head_classifier/tail', '../../Data/tail_classifier')
