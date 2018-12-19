@@ -12,7 +12,7 @@ def parse_argvs():
     parser.add_argument('--test_path', type=str, help='test dataset path',
                         default='../Data/car_classifier/classifier_train_best/test')
 
-    parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints/cc_resnet18.pkl')
+    parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints/cc_resnet18_32.pkl')
     parser.add_argument('--classes_num', type=int, help='classes num', default=32)
     parser.add_argument('--batch_size', type=int, help='batch size', default=32)
     parser.add_argument('--img_size', type=int, help='img size', default=224)

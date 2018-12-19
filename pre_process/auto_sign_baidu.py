@@ -56,7 +56,7 @@ def auto_sign(root_path):
             old_file_path = os.path.join(root, file)
 
             # 没有百度标志，表示没进行识别
-            if 'baidu' not in file:
+            if '_baidu_' not in file:
                 print old_file_path, os.path.exists(old_file_path)
                 success, token_err, result = post_image_base64_baidu(old_file_path, my_access_token[use_token_id])
                 if success:
@@ -73,7 +73,7 @@ def auto_sign(root_path):
                     if use_token_id < len(my_access_token) - 1:
                         use_token_id += 1
                     else:
-                        print('[token_err] all access_token used !')
+                        print('[auto_sign] all access_token used !')
                         return
 
 
