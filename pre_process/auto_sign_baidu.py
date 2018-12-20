@@ -8,7 +8,8 @@ import shutil
 from retry import retry
 
 my_access_token = ['24.486cc9beb6b983cc636628803b3618fa.2592000.1547862801.282335-15215859',
-                   '24.2fff2efc449c47ac9eb011a106827629.2592000.1547865295.282335-15216921']
+                   '24.2fff2efc449c47ac9eb011a106827629.2592000.1547865295.282335-15216921',
+                   '24.bdbf3b4dba262da4df0667d3b0b3f024.2592000.1547880857.282335-15220901']
 
 
 def get_access_token(api_key, secret_key):
@@ -110,8 +111,8 @@ if __name__ == '__main__':
     # 调用百度接口
     # get_access_token('37UGKok26cBBSEDz9GCSi0p0', 'd1L9eWIPB2EftZGeEQcFmAYwsIveyvTl')
     # get_access_token('eRHDdhQhx6Mw7X1ZhwoG51Va', '2G4faO8HDgvwNlAML4KU9TtGrtkGms9c')
+    # get_access_token('IX9EKhqrCkUvldEvRYEmqeMk', 'jK9AijBH5ZeZcWiF411YYFVkZt0ULQ3A')
     # post_image_base64_baidu('./112.jpg', '24.486cc9beb6b983cc636628803b3618fa.2592000.1547862801.282335-15215859')
 
     # 自动标记
-    # auto_clean('../../Data/car_classifier/clean_car/car_data')
     auto_sign('../../Data/car_classifier/clean_car/car_data')
