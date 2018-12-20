@@ -12,6 +12,7 @@ def parse_argvs():
     parser.add_argument('--test_path', type=str, help='test dataset path',
                         default='../Data/car_classifier/classifier_train_best/test')
 
+    parser.add_argument("--model_name", type=str, help="model name", default='resnet18')
     parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints/cc_resnet18_4.pkl')
     parser.add_argument('--classes_num', type=int, help='classes num', default=4)
     parser.add_argument('--batch_size', type=int, help='batch size', default=32)
@@ -42,10 +43,20 @@ if __name__ == '__main__':
     print('batch_size: %d' % batch_size)
     print('lr: %s' % lr)
 
-    model = models.resnet18(num_classes=num_classes)
-    # model = models.squeezenet1_1(num_classes=num_classes)
-    model_train = model_train.ModuleTrain(train_path, test_path, output_model_path, model=model, batch_size=batch_size,
-                                          img_size=img_size, lr=lr)
+    if args.model_name == 'resnet34':
+        model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.classes_num) + '.pkl')
+        model = models.resnet34(num_classes=num_classes)
+    elif args.model_name == 'densenet121':
+        model_file = os.path.join(output_model_path, 'cc_densenet121_' + str(args.classes_num) + '.pkl')
+        model = models.densenet121(num_classes=num_classes)
+    elif args.model_name == 'inception_v3':
+        model_file = os.path.join(output_model_path, 'cc_inception_v3_' + str(args.classes_num) + '.pkl')
+        model = models.inception_v3(num_classes=num_classes)
+    else:
+        model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.classes_num) + '.pkl')
+        model = models.resnet18(num_classes=num_classes)
+
+    model_train = model_train.ModuleTrain(train_path=train_path, test_path=test_path, model_file=model_file,
+                                          model=model, batch_size=batch_size, img_size=img_size, lr=lr)
 
     model_train.train(200, 80)
-    # model_train.test(show_img=True)
