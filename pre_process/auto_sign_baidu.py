@@ -104,6 +104,29 @@ def auto_sign(root_path):
                     shutil.move(old_file_path, new_file_path)
 
 
+def mkdir_if_not_exist(path):
+    if not os.path.exists(os.path.join(path)):
+        os.makedirs(os.path.join(path))
+
+
+# 自动拷贝
+def auto_copy(root_path, target_path):
+    mkdir_if_not_exist(target_path)
+
+    for root, dirs, files in os.walk(root_path):
+        for file in files:
+            old_file_path = os.path.join(root, file)
+
+            # 没有百度标志，表示没进行识别
+            if '_baidu_' in file:
+                print old_file_path
+                new_dir = os.path.join(target_path, root.split('/')[-1])
+
+                mkdir_if_not_exist(new_dir)
+                new_file_path = os.path.join(new_dir, file)
+                shutil.move(old_file_path, new_file_path)
+
+
 if __name__ == '__main__':
     # post_image_base64('http://127.0.0.1:9511')
     # post_image_base64('http://lpr.maysatech.com')
@@ -115,4 +138,6 @@ if __name__ == '__main__':
     # post_image_base64_baidu('./112.jpg', '24.486cc9beb6b983cc636628803b3618fa.2592000.1547862801.282335-15215859')
 
     # 自动标记
-    auto_sign('../../Data/car_classifier/clean_car/car_data')
+    # auto_sign('../../Data/car_classifier/clean_car/car_data')
+    auto_copy(root_path='../../Data/car_classifier/clean_car/car_data',
+              target_path='../../Data/car_classifier/clean_car/car_data_1')
