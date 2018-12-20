@@ -138,6 +138,6 @@ if __name__ == '__main__':
     # post_image_base64_baidu('./112.jpg', '24.486cc9beb6b983cc636628803b3618fa.2592000.1547862801.282335-15215859')
 
     # 自动标记
-    # auto_sign('../../Data/car_classifier/clean_car/car_data')
-    auto_copy(root_path='../../Data/car_classifier/clean_car/car_data',
-              target_path='../../Data/car_classifier/clean_car/car_data_1')
+    auto_sign('../../Data/car_classifier/clean_car/car_data')
+    # auto_copy(root_path='../../Data/car_classifier/clean_car/car_data',
+    #           target_path='../../Data/car_classifier/clean_car/car_data_1')
