@@ -41,7 +41,7 @@ def post_image_base64_baidu(image_path, access_token):
     response = urllib2.urlopen(request)
     content = response.read()
     print content
-    
+
     if 'Open api daily request limit reached' in content:
         # access_token异常，次数超过，更换token
         return False, True, None
@@ -74,7 +74,7 @@ def auto_sign(root_path):
             if '_baidu_' not in file:
                 print old_file_path
                 success, token_err, result = post_image_base64_baidu(old_file_path, my_access_token[use_token_id])
-                if token_err:
+                while token_err:
                     if use_token_id < len(my_access_token) - 1:
                         use_token_id += 1
                         print('change token id to: %s' % my_access_token[use_token_id])
