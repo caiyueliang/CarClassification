@@ -13,7 +13,7 @@ import time
 
 class ModuleTrain:
     def __init__(self, train_path, test_path, model_file, model, img_size=178, batch_size=8, lr=1e-3,
-                 re_train=False, best_acc=0.6):
+                 re_train=False, best_acc=0.5, optimizer='Adam'):
         self.train_path = train_path
         self.test_path = test_path
         self.model_file = model_file
@@ -21,6 +21,7 @@ class ModuleTrain:
         self.batch_size = batch_size
         self.re_train = re_train                        # 不加载训练模型，重新进行训练
         self.best_acc = best_acc                        # 正确率这个值，才会保存模型
+        self.use_optimizer = optimizer
 
         if torch.cuda.is_available():
             self.use_gpu = True
@@ -68,8 +69,11 @@ class ModuleTrain:
         self.loss = F.cross_entropy
 
         self.lr = lr
-        # self.optimizer = optim.SGD(self.model.parameters(), lr=self.lr, momentum=0.5)
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
+
+        if self.use_optimizer == 'SGD':
+            self.optimizer = optim.SGD(self.model.parameters(), lr=self.lr, momentum=0.9, weight_decay=5e-4)
+        else:
+            self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=5e-4)
 
         pass
 
@@ -124,6 +128,8 @@ class ModuleTrain:
                         if str_index != (len(str_list) - 1):
                             best_model_file += '.'
                     self.save(best_model_file)                                  # 保存最好的模型
+                    with open('best_record.txt', 'a+') as f:
+                        f.write(self.model_file + ',' + self.use_optimizer + ',' + str(self.best_acc) + '\n')
 
         self.save(self.model_file)
 

@@ -12,12 +12,14 @@ def parse_argvs():
     parser.add_argument('--test_path', type=str, help='test dataset path',
                         default='../Data/car_classifier/classifier_train_best/test')
 
-    parser.add_argument("--model_name", type=str, help="model name", default='resnet18')
-    parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints/cc_resnet18_4.pkl')
+    parser.add_argument("--model_name", type=str, help="model name", default='densenet121')
+    parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints')
     parser.add_argument('--classes_num', type=int, help='classes num', default=4)
-    parser.add_argument('--batch_size', type=int, help='batch size', default=32)
+    parser.add_argument('--batch_size', type=int, help='batch size', default=16)
     parser.add_argument('--img_size', type=int, help='img size', default=224)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
+    parser.add_argument("--optimizer", type=str, help="optimizer", default='Adam')
+    parser.add_argument("--re_train", type=bool, help="re_train", default=False)
 
     input_args = parser.parse_args()
     print(input_args)
@@ -50,13 +52,15 @@ if __name__ == '__main__':
         model_file = os.path.join(output_model_path, 'cc_densenet121_' + str(args.classes_num) + '.pkl')
         model = models.densenet121(num_classes=num_classes)
     elif args.model_name == 'inception_v3':
+        img_size = 299
         model_file = os.path.join(output_model_path, 'cc_inception_v3_' + str(args.classes_num) + '.pkl')
-        model = models.inception_v3(num_classes=num_classes)
+        model = models.inception_v3(num_classes=num_classes, aux_logits=False)
     else:
         model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.classes_num) + '.pkl')
         model = models.resnet18(num_classes=num_classes)
 
     model_train = model_train.ModuleTrain(train_path=train_path, test_path=test_path, model_file=model_file,
-                                          model=model, batch_size=batch_size, img_size=img_size, lr=lr)
+                                          model=model, batch_size=batch_size, img_size=img_size, lr=lr,
+                                          optimizer=args.optimizer, re_train=args.re_train)
 
-    model_train.train(200, 80)
+    model_train.train(300, 80)
