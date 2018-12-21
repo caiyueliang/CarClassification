@@ -88,10 +88,10 @@ def auto_sign(root_path):
                     year_0 = str(result['result'][0]['year']) if type(result['result'][0]['year']) == int else result['result'][0]['year'].encode('utf-8')
                     year_1 = str(result['result'][1]['year']) if type(result['result'][1]['year']) == int else result['result'][1]['year'].encode('utf-8')
                     new_file_name = file.split('.')[0] + '_baidu' + \
-                                    '_' + result['result'][0]['name'].encode('utf-8') + \
+                                    '_' + result['result'][0]['name'].replace('/', '').encode('utf-8') + \
                                     '_' + str(result['result'][0]['score']) + \
                                     '_' + year_0 + \
-                                    '_' + result['result'][1]['name'].encode('utf-8') + \
+                                    '_' + result['result'][1]['name'].replace('/', '').encode('utf-8') + \
                                     '_' + str(result['result'][1]['score']) + \
                                     '_' + year_1 + \
                                     '.' + file.split('.')[-1]
