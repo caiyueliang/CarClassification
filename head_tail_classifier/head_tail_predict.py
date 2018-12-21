@@ -43,6 +43,8 @@ class HeadTailPredict:
             T.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5])
         ])
 
+        self.model.eval()
+
     def predict(self, im):
         image = cv2.resize(im, (self.img_size, self.img_size))
         img_tensor = self.transform_test(image)
@@ -166,7 +168,7 @@ if __name__ == '__main__':
     model = models.resnet18(num_classes=num_classes)
     predict = HeadTailPredict(model=model, model_file=model_path, img_size=img_size)
 
-    predict.predict_image('../../Data/car_classifier/clean_car/head', '../../Data/car_classifier/clean_car/head_1/')
+    predict.predict_image('../../Data/car_classifier/clean_car/cardata', '../../Data/car_classifier/clean_car/cardata_1/')
 
     # predict.predict_head_image('../../Data/car_head_classifier/tail/', '../../Data/car_head_classifier_1/')
     # predict.predict_tail_image('../../Data/car_head_classifier/head/', '../../Data/car_head_classifier_1/')

@@ -7,8 +7,8 @@ from torchvision import models
 
 def parse_argvs():
     parser = ArgumentParser(description='head_tail_classifier')
-    parser.add_argument('--train_path', type=str, help='train path', default='../../Data/head_tail_classifier/train')
-    parser.add_argument('--test_path', type=str, help='test path', default='../../Data/head_tail_classifier/test')
+    parser.add_argument('--train_path', type=str, help='train path', default='../../Data/car_classifier/head_tail_classifier/train')
+    parser.add_argument('--test_path', type=str, help='test path', default='../../Data/car_classifier/head_tail_classifier/test')
 
     parser.add_argument("--output_model_path", type=str, help="model path", default='./checkpoints/htc_resnet18.pkl')
     parser.add_argument('--classes_num', type=int, help='classes num', default=2)

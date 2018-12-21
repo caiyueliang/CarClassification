@@ -91,6 +91,7 @@ class ModuleTrain:
                 self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
             print('================================================')
+            self.model.train()
             for batch_idx, (data, target) in enumerate(self.train_loader):              # 训练
                 data, target = Variable(data), Variable(target)
 
@@ -140,6 +141,7 @@ class ModuleTrain:
 
         time_start = time.time()
         # 测试集
+        self.model.eval()
         for data, target in self.test_loader:
             data, target = Variable(data), Variable(target)
 
