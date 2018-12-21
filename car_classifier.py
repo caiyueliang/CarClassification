@@ -2,7 +2,9 @@
 from argparse import ArgumentParser
 import os
 import model_train
+import torch
 from torchvision import models
+from models import resnet_torch
 
 
 def parse_argvs():
@@ -47,7 +49,8 @@ if __name__ == '__main__':
 
     if args.model_name == 'resnet34':
         model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.classes_num) + '.pkl')
-        model = models.resnet34(num_classes=num_classes)
+        # model = models.resnet34(num_classes=num_classes)
+        model = resnet_torch.resnet34(num_classes=num_classes)
     elif args.model_name == 'densenet121':
         model_file = os.path.join(output_model_path, 'cc_densenet121_' + str(args.classes_num) + '.pkl')
         model = models.densenet121(num_classes=num_classes)
@@ -57,10 +60,13 @@ if __name__ == '__main__':
         model = models.inception_v3(num_classes=num_classes, aux_logits=False)
     else:
         model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.classes_num) + '.pkl')
-        model = models.resnet18(num_classes=num_classes)
+        # model = models.resnet18(pretrained=True)
+        # fc_features = model.fc.in_features                              # 提取fc层中固定的输入参数
+        # model.fc = torch.nn.Linear(fc_features, num_classes)            # 修改类别为num_classes
+        model = resnet_torch.resnet18(num_classes=num_classes)
 
     model_train = model_train.ModuleTrain(train_path=train_path, test_path=test_path, model_file=model_file,
                                           model=model, batch_size=batch_size, img_size=img_size, lr=lr,
                                           optimizer=args.optimizer, re_train=args.re_train)
 
-    model_train.train(400, 100)
+    model_train.train(200, 100)
