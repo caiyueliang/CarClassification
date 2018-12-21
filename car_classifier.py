@@ -63,4 +63,4 @@ if __name__ == '__main__':
                                           model=model, batch_size=batch_size, img_size=img_size, lr=lr,
                                           optimizer=args.optimizer, re_train=args.re_train)
 
-    model_train.train(300, 80)
+    model_train.train(400, 100)

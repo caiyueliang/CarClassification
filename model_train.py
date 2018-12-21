@@ -39,7 +39,7 @@ class ModuleTrain:
         if os.path.exists(self.model_file) and not self.re_train:
             self.load(self.model_file)
         else:
-            print('[Load model] error !!!')
+            print('[Load model] error !!! %s' % self.model_file)
 
         # RandomHorizontalFlip
         self.transform_train = T.Compose([
