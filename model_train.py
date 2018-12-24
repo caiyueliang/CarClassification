@@ -13,15 +13,19 @@ import time
 
 class ModuleTrain:
     def __init__(self, train_path, test_path, model_file, model, img_size=178, batch_size=8, lr=1e-3,
-                 re_train=False, best_acc=0.5, optimizer='Adam'):
+                 re_train=False, best_acc=0.5, optimizer='Adam', transfer_learning=False, new_classes_num=1000,
+                 new_model_file=None):
         self.train_path = train_path
         self.test_path = test_path
-        self.model_file = model_file
+        self.model_file = model_file                    # 加载的模型文件名称
+        self.save_model_file = model_file               # 保存的模型文件名称
         self.img_size = img_size
         self.batch_size = batch_size
         self.re_train = re_train                        # 不加载训练模型，重新进行训练
         self.best_acc = best_acc                        # 正确率这个值，才会保存模型
         self.use_optimizer = optimizer
+        self.transfer_learning = transfer_learning
+        self.new_classes_num = new_classes_num
 
         if torch.cuda.is_available():
             self.use_gpu = True
@@ -40,6 +44,12 @@ class ModuleTrain:
             self.load(self.model_file)
         else:
             print('[Load model] error !!! %s' % self.model_file)
+
+        if self.transfer_learning is True:
+            print('[use transfer_learning] ... new classes num : %d' % self.new_classes_num)
+            fc_features = self.model.fc.in_features                                 # 提取fc层中固定的输入参数
+            self.model.fc = torch.nn.Linear(fc_features, self.new_classes_num)      # 修改类别为num_classes
+            self.save_model_file = new_model_file
 
         # RandomHorizontalFlip
         self.transform_train = T.Compose([
@@ -120,7 +130,7 @@ class ModuleTrain:
             if save_best is True:
                 if test_acc > self.best_acc:
                     self.best_acc = test_acc
-                    str_list = self.model_file.split('.')
+                    str_list = self.save_model_file.split('.')
                     best_model_file = ""
                     for str_index in range(len(str_list)):
                         best_model_file = best_model_file + str_list[str_index]
@@ -130,9 +140,9 @@ class ModuleTrain:
                             best_model_file += '.'
                     self.save(best_model_file)                                  # 保存最好的模型
                     with open('best_record.txt', 'a+') as f:
-                        f.write(self.model_file + ',' + self.use_optimizer + ',' + str(self.best_acc) + '\n')
+                        f.write(self.save_model_file + ',' + self.use_optimizer + ',' + str(self.best_acc) + '\n')
 
-        self.save(self.model_file)
+        self.save(self.save_model_file)
 
     def test(self):
         test_loss = 0.0
