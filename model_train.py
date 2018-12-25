@@ -34,22 +34,21 @@ class ModuleTrain:
 
         # 模型
         self.model = model
-
-        if self.use_gpu:
-            print('[use gpu] ...')
-            self.model = self.model.cuda()
-
         # 加载模型
         if os.path.exists(self.model_file) and not self.re_train:
             self.load(self.model_file)
         else:
             print('[Load model] error !!! %s' % self.model_file)
-
+        # 迁移学习
         if self.transfer_learning is True:
             print('[use transfer_learning] ... new classes num : %d' % self.new_classes_num)
             fc_features = self.model.fc.in_features                                 # 提取fc层中固定的输入参数
             self.model.fc = torch.nn.Linear(fc_features, self.new_classes_num)      # 修改类别为num_classes
             self.save_model_file = new_model_file
+
+        if self.use_gpu:
+            print('[use gpu] ...')
+            self.model = self.model.cuda()
 
         # RandomHorizontalFlip
         self.transform_train = T.Compose([
