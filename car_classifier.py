@@ -44,7 +44,7 @@ if __name__ == '__main__':
     new_model_file = None
 
     if args.model_name == 'resnet34':
-        model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.old_classes_num) + '.pkl')
+        model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.old_classes_num) + '_best.pkl')
         new_model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.new_classes_num) + '.pkl')
         model = models.resnet34(num_classes=old_classes_num)
         transfer_learning = True
@@ -56,7 +56,7 @@ if __name__ == '__main__':
         model_file = os.path.join(output_model_path, 'cc_inception_v3_' + str(args.old_classes_num) + '.pkl')
         model = models.inception_v3(num_classes=old_classes_num, aux_logits=False)
     else:
-        model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.old_classes_num) + '.pkl')
+        model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.old_classes_num) + '_best.pkl')
         new_model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.new_classes_num) + '.pkl')
         model = models.resnet18(num_classes=old_classes_num)
         transfer_learning = True
