@@ -16,8 +16,8 @@ def parse_argvs():
 
     parser.add_argument("--model_name", type=str, help="model name", default='densenet121')
     parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints')
-    parser.add_argument('--old_classes_num', type=int, help='old classes num', default=25)
-    parser.add_argument('--new_classes_num', type=int, help='new classes num', default=36)
+    parser.add_argument('--old_classes_num', type=int, help='old classes num', default=36)
+    parser.add_argument('--new_classes_num', type=int, help='new classes num', default=40)
     parser.add_argument('--batch_size', type=int, help='batch size', default=16)
     parser.add_argument('--img_size', type=int, help='img size', default=224)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
