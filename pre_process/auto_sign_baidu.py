@@ -94,6 +94,10 @@ def auto_sign(root_path):
                                     '_' + result['result'][1]['name'].replace('/', '').encode('utf-8') + \
                                     '_' + str(result['result'][1]['score']) + \
                                     '_' + year_1 + \
+                                    '_' + result["location_result"]["top"] + \
+                                    '_' + result["location_result"]["left"] + \
+                                    '_' + result["location_result"]["width"] + \
+                                    '_' + result["location_result"]["height"] + \
                                     '.' + file.split('.')[-1]
                     print(new_file_name)
                     new_file_path = os.path.join(root, new_file_name)

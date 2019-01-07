@@ -209,3 +209,14 @@
 ./checkpoints/cc_resnet34_63.pkl,SGD,0.96455026455
 ./checkpoints/cc_resnet34_63.pkl,SGD,0.965079365079
 ./checkpoints/cc_resnet34_63.pkl,SGD,0.966666666667
+
+./checkpoints/cc_resnet18_69.pkl,SGD,0.905797101449
+./checkpoints/cc_resnet18_69.pkl,SGD,0.944927536232
+./checkpoints/cc_resnet18_69.pkl,SGD,0.966183574879
+./checkpoints/cc_resnet34_69.pkl,SGD,0.921739130435
+./checkpoints/cc_resnet34_69.pkl,SGD,0.952173913043
+./checkpoints/cc_resnet34_69.pkl,SGD,0.961352657005
+./checkpoints/cc_resnet18_81.pkl,SGD,0.825514403292
+./checkpoints/cc_resnet18_81.pkl,SGD,0.880658436214
+./checkpoints/cc_resnet18_81.pkl,SGD,0.895061728395
+./checkpoints/cc_resnet18_81.pkl,SGD,0.917283950617
