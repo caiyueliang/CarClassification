@@ -16,7 +16,7 @@ def parse_argvs():
 
     parser.add_argument("--model_name", type=str, help="model name", default='densenet121')
     parser.add_argument("--output_model_path", type=str, help="output model path", default='./checkpoints')
-    parser.add_argument('--old_classes_num', type=int, help='old classes num', default=81)
+    parser.add_argument('--old_classes_num', type=int, help='old classes num', default=105)
     parser.add_argument('--new_classes_num', type=int, help='new classes num', default=105)
     parser.add_argument('--batch_size', type=int, help='batch size', default=16)
     parser.add_argument('--img_size', type=int, help='img size', default=224)
@@ -46,7 +46,8 @@ if __name__ == '__main__':
     if args.model_name == 'resnet34':
         model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.old_classes_num) + '_best.pkl')
         new_model_file = os.path.join(output_model_path, 'cc_resnet34_' + str(args.new_classes_num) + '.pkl')
-        model = models.resnet34(num_classes=old_classes_num)
+        # model = models.resnet34(num_classes=old_classes_num)
+        model = resnet_torch.resnet34(num_classes=old_classes_num)
         transfer_learning = True
     elif args.model_name == 'densenet121':
         model_file = os.path.join(output_model_path, 'cc_densenet121_' + str(args.old_classes_num) + '.pkl')
@@ -58,7 +59,8 @@ if __name__ == '__main__':
     else:
         model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.old_classes_num) + '_best.pkl')
         new_model_file = os.path.join(output_model_path, 'cc_resnet18_' + str(args.new_classes_num) + '.pkl')
-        model = models.resnet18(num_classes=old_classes_num)
+        # model = models.resnet18(num_classes=old_classes_num)
+        model = resnet_torch.resnet18(num_classes=old_classes_num)
         transfer_learning = True
 
     model_train = model_train.ModuleTrain(train_path=train_path, test_path=test_path, model_file=model_file,
