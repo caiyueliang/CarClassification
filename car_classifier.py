@@ -24,6 +24,9 @@ def parse_argvs():
     parser.add_argument("--optimizer", type=str, help="optimizer", default='Adam')
     parser.add_argument("--re_train", type=bool, help="re_train", default=False)
 
+    parser.add_argument("--epoch", type=int, help="epoch", default=200)
+    parser.add_argument("--decay_epoch", type=int, help="decay_epoch", default=60)
+
     input_args = parser.parse_args()
     print(input_args)
     return input_args
@@ -68,4 +71,4 @@ if __name__ == '__main__':
                                           optimizer=args.optimizer, re_train=args.re_train, new_model_file=new_model_file,
                                           transfer_learning=transfer_learning, new_classes_num=args.new_classes_num)
 
-    model_train.train(100, 40)
+    model_train.train(args.epoch, args.decay_epoch)
