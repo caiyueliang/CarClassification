@@ -1,5 +1,8 @@
 # encoding:utf-8
 import torch.nn as nn
+import torch
+import time
+from torch.autograd import Variable
 import math
 import torch.utils.model_zoo as model_zoo
 
@@ -214,3 +217,14 @@ def resnet152(pretrained=False, **kwargs):
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['resnet152']))
     return model
+
+
+if __name__ == '__main__':
+    model = resnet18(num_classes=4)
+    data = Variable(torch.randn(4, 3, 224, 224))
+    start = time.time()
+    pre = model(data)
+    end = time.time()
+
+    print('pre', pre.size(), pre)
+    print('time: %lf' % (end - start))

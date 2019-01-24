@@ -68,4 +68,4 @@ if __name__ == '__main__':
                                           optimizer=args.optimizer, re_train=args.re_train, new_model_file=new_model_file,
                                           transfer_learning=transfer_learning, new_classes_num=args.new_classes_num)
 
-    model_train.train(150, 60)
+    model_train.train(100, 40)

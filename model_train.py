@@ -75,7 +75,8 @@ class ModuleTrain:
         self.train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
         self.test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
-        self.loss = F.cross_entropy
+        # self.loss = F.cross_entropy
+        self.loss = torch.nn.CrossEntropyLoss()
 
         self.lr = lr
 
