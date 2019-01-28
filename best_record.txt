@@ -498,3 +498,4 @@
 ./checkpoints/cc_resnet34_105.pkl,SGD,0.977777777778
 ./checkpoints/cc_resnet34_105.pkl,SGD,0.979047619048
 ./checkpoints/cc_resnet34_105.pkl,SGD,0.98
+./checkpoints/cc_resnet18_129.pkl,SGD,0.962273901809
