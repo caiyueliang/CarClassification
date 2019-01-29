@@ -3,7 +3,7 @@ import requests
 import os
 
 
-def getImgData(word, pages): # PIG 输入关键词和页数
+def get_img_data(word, pages):                      # PIG 输入关键词和页数
     '''
     PIG 从百度图片获取数据 GET
     '''
@@ -43,13 +43,14 @@ def getImgData(word, pages): # PIG 输入关键词和页数
                       '1488942260214': ''
                       })
     for i in params:
-        r = requests.get(url,params = i)
+        r = requests.get(url, params=i)
         r = r.json().get('data')
-        del r[-1] #PIG 最后一个数据是空的所以删除
+        del r[-1]                           # PIG 最后一个数据是空的所以删除
         urls += r
     return urls
 
-def getImgUrl(urls):
+
+def get_img_url(urls):
     '''
     PIG 从获得的数据中取得图片的地址 LET
     '''
@@ -59,7 +60,8 @@ def getImgUrl(urls):
         imgUrls.append(imgUrl)
     return imgUrls
 
-def parseImgUrl(urls):
+
+def parse_img_url(urls):
     '''
     PIG 解析百度图片的objURL地址 LET
     '''
@@ -69,14 +71,15 @@ def parseImgUrl(urls):
         i = i.replace('_z2C$q',':')
         i = i.replace('_z&e3B','.')
         i = i.replace('AzdH3F','/')
-        intab='wkv1ju2it3hs4g5rq6fp7eo8dn9cm0bla'
-        outtab='abcdefghijklmnopqrstuvw1234567890'
+        intab = 'wkv1ju2it3hs4g5rq6fp7eo8dn9cm0bla'
+        outtab = 'abcdefghijklmnopqrstuvw1234567890'
         trantab = str.maketrans(intab, outtab)
         i = i.translate(trantab)
         urlInfo.append(i)
     return urlInfo
 
-def saveImg(urls,path): #PIG 填入图片路径
+
+def save_img(urls, path):           # PIG 填入图片路径
     '''
     PIG 存储图片 LET
     '''
@@ -84,7 +87,7 @@ def saveImg(urls,path): #PIG 填入图片路径
     if not os.path.exists(path):
         os.makedirs(path)
     for i,val in enumerate(urls):
-        print('正在下载第{}张图片:'.format(i), end='')
+        print('正在下载第{}张图片:'.format(i))
         try:
             pic = requests.get(val,headers = myHeaders,timeout = 3).content
         except:
@@ -94,18 +97,19 @@ def saveImg(urls,path): #PIG 填入图片路径
                 f.write(pic)
             print('成功')
     print("图片下载完成")
-keyword=[]
-for line in open('C:/Users/Dylan/Desktop/car/keyword.txt','r'):
-    line=line.replace("\n", "")
-    keyword.append(line)
 
 
 if __name__ == '__main__':
+    keyword = []
+    for line in open('C:/Users/Dylan/Desktop/car/keyword.txt', 'r'):
+        line = line.replace("\n", "")
+        keyword.append(line)
+
     for i in range(14):
-        word = keyword[i] #PIG 输入关键字
-        pages = 30 #PIG 输入页数，每页30张图片
+        word = keyword[i]           # PIG 输入关键字
+        pages = 30                  # PIG 输入页数，每页30张图片
         path = 'C:/Users/Dylan/Desktop/car/car_data/cardata'+'/'+word+'/'
-        imgData = getImgData(word,pages)
-        imgUrl = getImgUrl(imgData)
-        imgUrl = parseImgUrl(imgUrl)
-        saveImg(imgUrl,path)
+        imgData = get_img_data(word, pages)
+        imgUrl = get_img_url(imgData)
+        imgUrl = parse_img_url(imgUrl)
+        save_img(imgUrl, path)
