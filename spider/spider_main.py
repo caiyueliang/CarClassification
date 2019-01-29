@@ -43,19 +43,22 @@ def get_img_data(word, pages):                      # PIG 输入关键词和页�
                       '1488942260214': ''
                       })
 
-    for param in params:
-        print('param', param)
+    for index, param in enumerate(params):
+        print('params [%d/%d]' % (index, len(params)))
         response = requests.get(url, params=param)
-        print('response', response)
-        print('url', response.url)
-        print('request', response.request)
+        # print('response', response)
+        # print('url', response.url)
+        # print('request', response.request)
         print('text', response.text)
 
+        print('response.status_code', response.status_code)
         if response.status_code == requests.codes.ok:
-            print('json()', response.json())
-            r = response.json().get('data')
-            del r[-1]                           # PIG 最后一个数据是空的所以删除
-            urls += r
+            # print('json()', response.json())
+            data = response.json().get('data')
+            print('data', data)
+            print('data', len(data))
+            del data[-1]                           # PIG 最后一个数据是空的所以删除
+            urls += data
     return urls
 
 
