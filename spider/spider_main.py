@@ -10,7 +10,7 @@ def get_img_data(word, pages):                      # PIG 输入关键词和页�
     params = []
     urls = []
     url = 'http://image.baidu.com/search/acjson'
-    for i in range(30,30*pages+30,30):
+    for i in range(30, 30*pages+30, 30):
         params.append({
                       'tn': 'resultjson_com',
                       'ipn': 'rj',
@@ -42,11 +42,20 @@ def get_img_data(word, pages):                      # PIG 输入关键词和页�
                       'gsm': '1e',
                       '1488942260214': ''
                       })
-    for i in params:
-        r = requests.get(url, params=i)
-        r = r.json().get('data')
-        del r[-1]                           # PIG 最后一个数据是空的所以删除
-        urls += r
+
+    for param in params:
+        print('param', param)
+        response = requests.get(url, params=param)
+        print('response', response)
+        print('url', response.url)
+        print('request', response.request)
+        print('text', response.text)
+
+        if response.status_code == requests.codes.ok:
+            print('json()', response.json())
+            r = response.json().get('data')
+            del r[-1]                           # PIG 最后一个数据是空的所以删除
+            urls += r
     return urls
 
 
@@ -89,26 +98,25 @@ def save_img(urls, path):           # PIG 填入图片路径
     for i,val in enumerate(urls):
         print('正在下载第{}张图片:'.format(i))
         try:
-            pic = requests.get(val,headers = myHeaders,timeout = 3).content
+            pic = requests.get(val, headers=myHeaders, timeout=3).content
         except:
             print('失败')
         else:
-            with open(path + word+ '_'+str(i) +'.jpg','wb') as f:
+            with open(path + word + '_' + str(i) + '.jpg', 'wb') as f:
                 f.write(pic)
             print('成功')
     print("图片下载完成")
 
 
 if __name__ == '__main__':
-    keyword = []
-    for line in open('C:/Users/Dylan/Desktop/car/keyword.txt', 'r'):
-        line = line.replace("\n", "")
+    keyword = list()
+    for line in open('./keyword.txt', 'r'):
+        line = line.rstrip().replace("\n", "")
         keyword.append(line)
 
-    for i in range(14):
-        word = keyword[i]           # PIG 输入关键字
+    for word in keyword:
         pages = 30                  # PIG 输入页数，每页30张图片
-        path = 'C:/Users/Dylan/Desktop/car/car_data/cardata'+'/'+word+'/'
+        path = './car_data/'+word+'/'
         imgData = get_img_data(word, pages)
         imgUrl = get_img_url(imgData)
         imgUrl = parse_img_url(imgUrl)
